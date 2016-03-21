@@ -1,0 +1,133 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution {
+
+
+   	private static void print_matrix(int[][] mat,int rows, int cols){
+    	for(int row=0;row<rows;row++){
+        	for(int col=0;col<cols-1;col++){
+        		System.out.print(mat[row][col]+" ");
+        	}
+        	System.out.println(mat[row][cols-1]);
+    	}
+    	System.out.println("");
+	}
+	
+	
+	private static void rotate_layer(int[][] orig, int[][] sol,int rows,int cols,int layer,long amount){
+//top row
+		for(int index=layer; index<(cols-layer);index++){
+			long move=amount;
+			int new_row=layer;
+			int new_col=index;
+			while (move>0){
+				if (new_row==layer&&new_col>layer){
+					new_col--;
+				}else if (new_col==layer&&new_row<(rows-layer-1)){
+					new_row++;
+				}else if (new_row==(rows-layer-1)&&new_col<(cols-layer-1)){
+					new_col++;
+				}else {
+					new_row--;
+				}
+				move--;
+			}
+			sol[new_row][new_col]=orig[layer][index];
+		}
+//bottom row
+		for(int index=layer; index<(cols-layer); index++){
+			long move=amount;
+			int new_row=rows-layer-1;
+			int new_col=index;
+			while (move>0){
+				if (new_row==layer&&new_col>layer){
+					new_col--;
+				}else if (new_col==layer&&new_row<(rows-layer-1)){
+					new_row++;
+				}else if (new_row==(rows-layer-1)&&new_col<(cols-layer-1)){
+					new_col++;
+				}else {
+					new_row--;
+				}
+				move--;
+			}
+			
+			sol[new_row][new_col]=orig[rows-layer-1][index];
+		}
+//left col
+		for(int index=layer; index<(rows-layer-1); index++){
+			long move=amount;
+			int new_row=index;
+			int new_col=layer;
+			while (move>0){
+				if (new_row==layer&&new_col>layer){
+					new_col--;
+				}else if (new_col==layer&&new_row<(rows-layer-1)){
+					new_row++;
+				}else if (new_row==(rows-layer-1)&&new_col<(cols-layer-1)){
+					new_col++;
+				}else {
+					new_row--;
+				}
+				move--;
+			}
+			sol[new_row][new_col]=orig[index][layer];
+
+		}
+//right col
+		for(int index=layer; index<(rows-layer); index++){
+			long move=amount;
+			int new_row=index;
+			int new_col=cols-layer-1;
+			while (move>0){
+				if (new_row==layer&&new_col>layer){
+					new_col--;
+				}else if (new_col==layer&&new_row<(rows-layer-1)){
+					new_row++;
+				}else if (new_row==(rows-layer-1)&&new_col<(cols-layer-1)){
+					new_col++;
+				}else {
+					new_row--;
+				}
+				move--;
+			}
+
+			sol[new_row][new_col]=orig[index][cols-layer-1];
+		}		
+	}
+	
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+                
+        int m;
+        int n;
+        long r;
+        
+        m=in.nextInt();
+        n=in.nextInt();
+        r=in.nextLong();
+        
+        int matrix[][]=new int[m][n];
+        for(int row=0;row<m;row++){
+        	for(int col=0;col<n;col++){
+        		matrix[row][col]=in.nextInt();
+        	}
+        }
+
+        
+        int sol_mat[][]=new int[m][n];
+        int layers=Math.min(m,n)/2;
+        
+        for( int layer=0; layer<layers; layer++){
+        	long layer_spaces=((n-2*layer)*2 + (m-2*layer)*2)-4;
+        	long rotate= r%layer_spaces;
+        	rotate_layer(matrix,sol_mat, m, n, layer, rotate);
+        	//test
+        }
+        print_matrix(sol_mat,m,n);
+    }
+}
