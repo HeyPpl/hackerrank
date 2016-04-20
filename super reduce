@@ -1,0 +1,33 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner reader = new Scanner(System.in);
+        
+        List m=new ArrayList();
+        char current=reader.nextChar();
+        
+        int index=0;
+        m.add(index, current);
+        while (reader.hasNextChar()){
+            current=reader.nextChar();
+            if (m.isEmpty()||(current!=m.get(index))){
+                index++;
+                m.add(index, current);                
+            }else{
+                m.remove(index);
+                index--;
+            }    
+        }
+        for(int i=0; i<m.size(); i++){
+            System.out.print(m.get(i));
+        }
+        
+    }
+}
